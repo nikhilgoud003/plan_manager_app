@@ -42,3 +42,24 @@ extension StringExtension on String {
     return "${this[0].toUpperCase()}${this.substring(1)}";
   }
 }
+
+class PlanManagerScreen extends StatefulWidget {
+  @override
+  _PlanManagerScreenState createState() => _PlanManagerScreenState();
+}
+
+class _PlanManagerScreenState extends State<PlanManagerScreen> {
+  List<Plan> plans = [];
+  DateTime selectedDate = DateTime.now();
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  Plan? _draggedPlan;
+
+  List<Plan> get _filteredPlans {
+    return plans
+        .where((plan) =>
+            plan.date.year == selectedDate.year &&
+            plan.date.month == selectedDate.month &&
+            plan.date.day == selectedDate.day)
+        .toList();
+  }
+}
