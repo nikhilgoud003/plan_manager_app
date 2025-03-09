@@ -1,3 +1,4 @@
+//Nikhil Goud Yeminedi
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -11,7 +12,7 @@ class Plan {
   DateTime date;
   String priority;
   bool isCompleted;
-  String status; // Added status field
+  String status;
 
   Plan({
     required this.name,
@@ -19,7 +20,7 @@ class Plan {
     required this.date,
     required this.priority,
     this.isCompleted = false,
-    this.status = 'pending', // Default status
+    this.status = 'pending',
   });
 }
 
@@ -36,7 +37,6 @@ class PlanManagerApp extends StatelessWidget {
   }
 }
 
-// Extension to capitalize strings
 extension StringExtension on String {
   String capitalize() {
     return "${this[0].toUpperCase()}${this.substring(1)}";
@@ -119,4 +119,104 @@ void _sortPlans() {
           : a.date.compareTo(b.date);
     });
   });
+}
+
+void _showCreatePlanDialog({int? index, DateTime? date}) {
+  String name = index != null ? plans[index].name : '';
+  String description = index != null ? plans[index].description : '';
+  DateTime selectedPlanDate =
+      date ?? (index != null ? plans[index].date : selectedDate);
+  String selectedPriority = index != null ? plans[index].priority : 'Medium';
+  String selectedStatus = index != null ? plans[index].status : 'pending';
+
+  showDialog(
+    context: context,
+    builder: (context) {
+      return AlertDialog(
+        title:
+            Text(index == null ? "Create your own Plan" : "Modify your Plan"),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                decoration: InputDecoration(labelText: "Task Name"),
+                controller: TextEditingController(text: name),
+                onChanged: (value) => name = value,
+              ),
+              TextField(
+                decoration: InputDecoration(labelText: "Basic Description"),
+                controller: TextEditingController(text: description),
+                onChanged: (value) => description = value,
+                maxLines: 3,
+              ),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Text("Priority: "),
+                  SizedBox(width: 10),
+                  DropdownButton<String>(
+                    value: selectedPriority,
+                    items: ['High', 'Medium', 'Low'].map((priority) {
+                      return DropdownMenuItem(
+                        value: priority,
+                        child: Text(priority),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedPriority = value!;
+                      });
+                    },
+                  ),
+                ],
+              ),
+              SizedBox(height: 10),
+              Row(
+                children: [
+                  Text("Status: "),
+                  SizedBox(width: 10),
+                  DropdownButton<String>(
+                    value: selectedStatus,
+                    items: ['pending', 'completed'].map((status) {
+                      return DropdownMenuItem(
+                        value: status,
+                        child: Text(status.capitalize()),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        selectedStatus = value!;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () {
+              if (name.isNotEmpty) {
+                if (index == null) {
+                  _addPlan(name, description, selectedPlanDate,
+                      selectedPriority, selectedStatus);
+                } else {
+                  _updatePlan(index, name, description, selectedPlanDate,
+                      selectedPriority, selectedStatus);
+                }
+                Navigator.pop(context);
+              }
+            },
+            child: Text(index == null ? "Add" : "Update"),
+          ),
+        ],
+      );
+    },
+  );
 }
