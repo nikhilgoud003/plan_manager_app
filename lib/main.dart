@@ -220,3 +220,34 @@ void _showCreatePlanDialog({int? index, DateTime? date}) {
     },
   );
 }
+
+// Get color based on plan status and priority
+Color _getPlanColor(Plan plan) {
+  if (plan.isCompleted || plan.status == 'completed') {
+    return Colors.green.shade200;
+  } else {
+    switch (plan.priority) {
+      case 'High':
+        return Colors.red.shade200;
+      case 'Medium':
+        return Colors.orange.shade200;
+      case 'Low':
+        return Colors.blue.shade200;
+      default:
+        return Colors.grey.shade200;
+    }
+  }
+}
+
+Color _getPriorityColor(String priority) {
+  switch (priority) {
+    case 'High':
+      return const Color.fromARGB(255, 227, 5, 27);
+    case 'Medium':
+      return const Color.fromARGB(255, 232, 143, 8);
+    case 'Low':
+      return const Color.fromARGB(255, 6, 130, 232);
+    default:
+      return const Color.fromARGB(255, 207, 200, 200);
+  }
+}
