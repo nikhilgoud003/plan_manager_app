@@ -126,7 +126,7 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text(index == null ? "Create Plan" : "Edit Plan"),
+          title: Text(index == null ? "Create your Plan" : "Modify your Plan"),
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
