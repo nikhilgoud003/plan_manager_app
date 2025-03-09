@@ -545,4 +545,22 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
     );
   }
 
- 
+  Color _getPriorityColor(String priority) {
+    switch (priority) {
+      case 'High':
+        return const Color.fromARGB(255, 231, 9, 31);
+      case 'Medium':
+        return const Color.fromARGB(255, 197, 125, 17);
+      case 'Low':
+        return const Color.fromARGB(255, 12, 115, 200);
+      default:
+        return const Color.fromARGB(255, 165, 157, 157);
+    }
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1)}";
+  }
+}
