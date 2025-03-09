@@ -63,3 +63,60 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
         .toList();
   }
 }
+
+void _addPlan(String name, String description, DateTime date, String priority,
+    String status) {
+  setState(() {
+    plans.add(Plan(
+        name: name,
+        description: description,
+        date: date,
+        priority: priority,
+        status: status));
+    _sortPlans();
+  });
+}
+
+void _updatePlan(int index, String name, String description, DateTime date,
+    String priority, String status) {
+  setState(() {
+    Plan updatedPlan = plans[index];
+    updatedPlan.name = name;
+    updatedPlan.description = description;
+    updatedPlan.date = date;
+    updatedPlan.priority = priority;
+    updatedPlan.status = status;
+    _sortPlans();
+  });
+}
+
+void _toggleCompletion(int index, DismissDirection direction) {
+  setState(() {
+    if (direction == DismissDirection.endToStart) {
+      plans[index].isCompleted = true;
+      plans[index].status = 'completed';
+    } else if (direction == DismissDirection.startToEnd) {
+      plans[index].isCompleted = false;
+      plans[index].status = 'pending';
+    }
+  });
+}
+
+void _deletePlan(int index) {
+  setState(() {
+    plans.removeAt(index);
+  });
+}
+
+void _sortPlans() {
+  setState(() {
+    plans.sort((a, b) {
+      const priorityOrder = {'High': 0, 'Medium': 1, 'Low': 2};
+      int priorityComparison =
+          priorityOrder[a.priority]!.compareTo(priorityOrder[b.priority]!);
+      return priorityComparison != 0
+          ? priorityComparison
+          : a.date.compareTo(b.date);
+    });
+  });
+}
